@@ -1,24 +1,26 @@
 .container {
   position: relative;
   width: 100%;
-  height: 600px;
+  min-height: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  padding: 2rem 0;
 }
 
-.scene {
+.testimonialWrapper {
   width: 100%;
+  max-width: 1200px;
   height: 500px;
-  perspective: 1200px;
+  position: relative;
+  perspective: 1500px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.carousel {
+.testimonialCards {
   position: relative;
   width: 100%;
   height: 100%;
@@ -29,37 +31,74 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 350px;
-  height: 400px;
-  margin-left: -175px;
-  margin-top: -200px;
+  width: 400px;
+  height: 450px;
+  margin-left: -200px;
+  margin-top: -225px;
   transform-style: preserve-3d;
-  backface-visibility: hidden;
+  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  opacity: 0.4;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.card.active {
+  opacity: 1;
+  filter: blur(0);
+  z-index: 10;
+  pointer-events: all;
+  transform: translateX(0) translateZ(0) scale(1);
+}
+
+.card:not(.active) {
+  transform: translateX(calc(var(--position) * 380px)) translateZ(-400px) scale(0.85);
 }
 
 .cardContent {
   width: 100%;
   height: 100%;
-  background: rgba(26, 26, 26, 0.9);
-  border: 1px solid rgba(245, 235, 221, 0.15);
-  border-radius: 16px;
-  padding: 2rem;
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(13, 13, 13, 0.9) 100%);
+  border: 2px solid rgba(245, 235, 221, 0.15);
+  border-radius: 20px;
+  padding: 2.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  gap: 1.25rem;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+              0 0 0 1px rgba(245, 235, 221, 0.05) inset;
   backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.cardContent::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(215, 38, 56, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.card.active .cardContent::before {
+  opacity: 1;
 }
 
 .imageWrapper {
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   overflow: hidden;
-  border: 3px solid #D72638;
-  box-shadow: 0 4px 12px rgba(215, 38, 56, 0.3);
+  border: 4px solid #D72638;
+  box-shadow: 0 8px 24px rgba(215, 38, 56, 0.4),
+              0 0 0 4px rgba(215, 38, 56, 0.1);
+  position: relative;
+  z-index: 1;
 }
 
 .image {
@@ -69,121 +108,193 @@
 }
 
 .quote {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: rgba(245, 235, 221, 0.9);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: rgba(245, 235, 221, 0.95);
   text-align: center;
   font-style: italic;
   flex: 1;
   display: flex;
   align-items: center;
+  position: relative;
+  padding: 0 1rem;
+}
+
+.quote::before,
+.quote::after {
+  content: '"';
+  font-size: 4rem;
+  color: rgba(215, 38, 56, 0.2);
+  position: absolute;
+  font-family: Georgia, serif;
+  line-height: 0;
+}
+
+.quote::before {
+  top: 0;
+  left: -10px;
+}
+
+.quote::after {
+  bottom: -20px;
+  right: -10px;
 }
 
 .author {
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .name {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #F5EBDD;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.35rem;
+  letter-spacing: 0.02em;
 }
 
 .location {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #D72638;
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
 }
 
 .company {
-  font-size: 0.85rem;
-  color: rgba(245, 235, 221, 0.6);
+  font-size: 0.9rem;
+  color: rgba(245, 235, 221, 0.5);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
+  font-weight: 500;
 }
 
 .rating {
   display: flex;
-  gap: 0.25rem;
+  gap: 0.35rem;
+  position: relative;
+  z-index: 1;
 }
 
 .star {
   color: #D72638;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  filter: drop-shadow(0 0 4px rgba(215, 38, 56, 0.5));
 }
 
 .controls {
   display: flex;
   align-items: center;
-  gap: 2rem;
-  margin-top: 2rem;
+  gap: 2.5rem;
+  margin-top: 3rem;
+  z-index: 20;
+  position: relative;
 }
 
 .controlBtn {
-  width: 50px;
-  height: 50px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
-  background: rgba(245, 235, 221, 0.05);
-  border: 1px solid rgba(245, 235, 221, 0.2);
+  background: linear-gradient(135deg, rgba(215, 38, 56, 0.2) 0%, rgba(215, 38, 56, 0.1) 100%);
+  border: 2px solid rgba(245, 235, 221, 0.2);
   color: #F5EBDD;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
 }
 
 .controlBtn:hover {
-  background: #D72638;
+  background: linear-gradient(135deg, #D72638 0%, #E83345 100%);
   border-color: #D72638;
-  transform: scale(1.1);
+  transform: scale(1.15);
+  box-shadow: 0 8px 24px rgba(215, 38, 56, 0.4);
   color: #1A1A1A;
 }
 
 .indicators {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .indicator {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: rgba(245, 235, 221, 0.2);
-  border: 1px solid rgba(245, 235, 221, 0.3);
+  border: 2px solid rgba(245, 235, 221, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
+  position: relative;
+}
+
+.indicator::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease;
 }
 
 .indicator:hover,
 .indicator.active {
   background: #D72638;
   border-color: #D72638;
-  transform: scale(1.2);
+  transform: scale(1.3);
+  box-shadow: 0 0 12px rgba(215, 38, 56, 0.6);
+}
+
+.indicator.active::after {
+  border-color: rgba(215, 38, 56, 0.3);
+}
+
+@media (max-width: 1024px) {
+  .card {
+    width: 350px;
+    height: 420px;
+    margin-left: -175px;
+    margin-top: -210px;
+  }
+
+  .card:not(.active) {
+    transform: translateX(calc(var(--position) * 340px)) translateZ(-350px) scale(0.8);
+  }
 }
 
 @media (max-width: 768px) {
   .container {
-    height: 500px;
+    min-height: 550px;
   }
 
-  .scene {
-    height: 400px;
+  .testimonialWrapper {
+    height: 450px;
   }
 
   .card {
-    width: 300px;
-    height: 350px;
-    margin-left: -150px;
-    margin-top: -175px;
+    width: 320px;
+    height: 400px;
+    margin-left: -160px;
+    margin-top: -200px;
+  }
+
+  .card:not(.active) {
+    transform: translateX(calc(var(--position) * 100vw)) translateZ(-300px) scale(0.75);
+    opacity: 0;
   }
 
   .cardContent {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
   }
 
   .quote {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+  }
+
+  .controlBtn {
+    width: 48px;
+    height: 48px;
   }
 }
