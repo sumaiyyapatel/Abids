@@ -1,0 +1,353 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+.about {
+  min-height: 100vh;
+  background: #0D0D0D;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1920');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(13, 13, 13, 0.9) 0%, rgba(26, 26, 26, 0.8) 100%);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  max-width: 900px;
+  padding: 0 2rem;
+}
+
+.heroContent h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 700;
+  color: #F5EBDD;
+  margin-bottom: 1rem;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.heroContent p {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  color: rgba(245, 235, 221, 0.7);
+}
+
+/* Story */
+.story {
+  padding: 6rem 0;
+  background: rgba(245, 235, 221, 0.02);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.storyGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.storyImage {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.storyImage img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.storyImage:hover img {
+  transform: scale(1.05);
+}
+
+.storyContent h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #F5EBDD;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.storyContent p {
+  color: rgba(245, 235, 221, 0.8);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+}
+
+.storyContent strong {
+  color: #D72638;
+}
+
+/* Timeline */
+.timeline {
+  padding: 6rem 0;
+  background: #0D0D0D;
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.sectionHeader h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: #F5EBDD;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.sectionHeader p {
+  font-size: 1.2rem;
+  color: rgba(245, 235, 221, 0.6);
+}
+
+.timelineWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.timelineWrapper::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent 0%, #D72638 20%, #D72638 80%, transparent 100%);
+  transform: translateX(-50%);
+}
+
+.timelineItem {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.timelineItem:nth-child(even) .timelineYear {
+  order: 3;
+  text-align: left;
+}
+
+.timelineItem:nth-child(even) .timelineCard {
+  order: 1;
+}
+
+.timelineYear {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #D72638;
+  text-align: right;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.timelineItem::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  background: #D72638;
+  border-radius: 50%;
+  box-shadow: 0 0 0 8px rgba(215, 38, 56, 0.2);
+  order: 2;
+}
+
+.timelineCard {
+  background: rgba(26, 26, 26, 0.6);
+  border: 1px solid rgba(245, 235, 221, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  order: 3;
+}
+
+.timelineCard:hover {
+  transform: scale(1.02);
+  border-color: rgba(215, 38, 56, 0.4);
+  box-shadow: 0 12px 40px rgba(215, 38, 56, 0.2);
+}
+
+.timelineImage {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.timelineImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.timelineCard:hover .timelineImage img {
+  transform: scale(1.1);
+}
+
+.timelineContent {
+  padding: 1.5rem;
+}
+
+.timelineContent h3 {
+  font-size: 1.5rem;
+  color: #F5EBDD;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.timelineContent p {
+  color: rgba(245, 235, 221, 0.7);
+  line-height: 1.6;
+}
+
+/* Values */
+.values {
+  padding: 6rem 0;
+  background: rgba(245, 235, 221, 0.02);
+}
+
+.valuesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.valueCard {
+  padding: 2.5rem;
+  background: rgba(26, 26, 26, 0.5);
+  border: 1px solid rgba(245, 235, 221, 0.1);
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+.valueCard:hover {
+  transform: translateY(-8px);
+  border-color: rgba(215, 38, 56, 0.4);
+  background: rgba(26, 26, 26, 0.8);
+}
+
+.valueIcon {
+  color: #D72638;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.valueCard h3 {
+  font-size: 1.4rem;
+  color: #F5EBDD;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.valueCard p {
+  color: rgba(245, 235, 221, 0.7);
+  line-height: 1.6;
+}
+
+/* Infrastructure */
+.infrastructure {
+  padding: 6rem 0;
+  background: #0D0D0D;
+}
+
+.infraContent p {
+  color: rgba(245, 235, 221, 0.8);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  font-size: 1.05rem;
+  text-align: center;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.infraGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 3rem 0;
+}
+
+.infraItem {
+  padding: 1.5rem;
+  background: rgba(215, 38, 56, 0.1);
+  border: 1px solid rgba(215, 38, 56, 0.3);
+  border-radius: 8px;
+  color: #F5EBDD;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.infraItem:hover {
+  background: rgba(215, 38, 56, 0.2);
+  transform: translateY(-4px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .storyGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .timelineWrapper::before {
+    left: 20px;
+  }
+
+  .timelineItem {
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    padding-left: 2rem;
+  }
+
+  .timelineYear {
+    display: none;
+  }
+
+  .timelineItem::after {
+    order: 1;
+    transform: translateX(-10px);
+  }
+
+  .timelineCard {
+    order: 2;
+  }
+
+  .timelineItem:nth-child(even) .timelineCard {
+    order: 2;
+  }
+
+  .infraGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+.products {
+  min-height: 100vh;
+  background: #0D0D0D;
+}
+
+.hero {
+  position: relative;
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=1920');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(13, 13, 13, 0.9) 0%, rgba(26, 26, 26, 0.8) 100%);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 0 2rem;
+}
+
+.heroContent h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 700;
+  color: #F5EBDD;
+  margin-bottom: 1rem;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.heroContent p {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  color: rgba(245, 235, 221, 0.7);
+}
+
+.category {
+  padding: 5rem 0;
+}
+
+.category:nth-child(even) {
+  background: rgba(245, 235, 221, 0.02);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.categoryHeader {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.categoryHeader h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #F5EBDD;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 1rem;
+}
+
+.categoryHeader h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: #D72638;
+}
+
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .productsGrid {
+    grid-template-columns: 1fr;
+  }
+}
