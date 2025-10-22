@@ -107,21 +107,22 @@ const Home = () => {
           <div className={styles.heroText}>
             <h1 className="hero-title" data-testid="hero-title">
               <span className={styles.heroSubtext}>Experience the Art of</span>
-              <span className={styles.heroMainText}>Precision Cooling</span>
-              <span className={styles.heroAccent}>with ABID</span>
+              <span className={styles.heroMainText}>Precision Cooling With </span>
+              <span className={styles.heroAccent}>ABID REFRIGERATION AND ENGINEERING</span>
             </h1>
             <p className="hero-subtitle" data-testid="hero-subtitle">
               Powering Professional Kitchens with Quality Equipment Since 1996
             </p>
-            <a 
-              href="https://wa.link/ah95hi" 
-              target="_blank" 
+            <a
+              href="https://wa.link/ah95hi"
+              target="_blank"
               rel="noopener noreferrer"
               className="hero-cta"
               data-testid="hero-cta-btn"
             >
-              <span>Contact Us Now</span>
-              <ArrowRight size={20} />
+              <Link to="/contact" className={styles.learnMore} data-testid="hero-contact-btn">
+                Contact Us Now<ArrowRight size={18} />
+              </Link>
             </a>
           </div>
         </div>
@@ -146,21 +147,21 @@ const Home = () => {
         <div className={styles.container}>
           <div className={styles.aboutGrid}>
             <div className={styles.aboutImage}>
-              <img 
-                src="https://i0.wp.com/abidnagpur.com/wp-content/uploads/2025/06/2-5-scaled.png" 
-                alt="Abid Factory" 
+              <img
+                src="https://i0.wp.com/abidnagpur.com/wp-content/uploads/2025/06/2-5-scaled.png"
+                alt="Abid Factory"
               />
             </div>
             <div className={styles.aboutContent}>
               <h2>ABID REFRIGERATION & ENGINEERING PRIVATE LIMITED</h2>
               <p>
-                Founded in 1996 at Nagpur, Maharashtra, Abid Refrigeration is a renowned 
-                manufacturer of Display Counters, Commercial Kitchen Products, and Food Carts. 
+                Founded in 1996 at Nagpur, Maharashtra, Abid Refrigeration is a renowned
+                manufacturer of Display Counters, Commercial Kitchen Products, and Food Carts.
                 We use 304 Food Grade raw materials and sophisticated technology to meet global standards.
               </p>
               <p>
-                Our products are acknowledged for supreme quality, durability, fine finish, 
-                reliability, and easy installation. We offer standard and customized solutions 
+                Our products are acknowledged for supreme quality, durability, fine finish,
+                reliability, and easy installation. We offer standard and customized solutions
                 to meet your precise requirements.
               </p>
               <Link to="/about" className={styles.learnMore} data-testid="learn-more-btn">
@@ -209,6 +210,15 @@ const Home = () => {
           </div>
         </div>
       </section>
+      {/* Brand Marquee */}
+      <section className={styles.brands} data-testid="brands-section">
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            <h2>Trusted by Leading Brands</h2>
+          </div>
+        </div>
+        <BrandMarquee brands={brands} />
+      </section>
 
       {/* Testimonials */}
       <section className={`${styles.testimonials} reveal`} data-testid="testimonials-section">
@@ -221,15 +231,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Brand Marquee */}
-      <section className={styles.brands} data-testid="brands-section">
-        <div className={styles.container}>
-          <div className={styles.sectionHeader}>
-            <h2>Trusted by Leading Brands</h2>
-          </div>
-        </div>
-        <BrandMarquee brands={brands} />
-      </section>
 
       {/* CTA Section */}
       <section className={`${styles.cta} reveal`} data-testid="cta-section">
@@ -238,16 +239,16 @@ const Home = () => {
             <h2>Ready to Upgrade Your Kitchen?</h2>
             <p>Contact us today for customized solutions</p>
             <div className={styles.ctaButtons}>
-              <a 
-                href="tel:+919876543210" 
+              <a
+                href="tel:+919876543210"
                 className={styles.ctaBtn}
                 data-testid="cta-call-btn"
               >
                 <Phone size={20} />
                 <span>Call Now</span>
               </a>
-              <Link 
-                to="/contact" 
+              <Link
+                to="/contact"
                 className={`${styles.ctaBtn} ${styles.secondary}`}
                 data-testid="cta-contact-btn"
               >

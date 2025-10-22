@@ -93,4 +93,94 @@
   .productsGrid {
     grid-template-columns: 1fr;
   }
+}.catalogueSection {
+  padding: 5rem 0;
+  min-height: 60vh;
+}
+
+/* Tabs Container */
+.tabsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 4rem;
+  flex-wrap: wrap;
+  padding: 0 2rem;
+}
+
+/* Tab Button */
+.tabButton {
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  background: rgba(245, 235, 221, 0.05);
+  color: rgba(245, 235, 221, 0.7);
+  border: 2px solid rgba(245, 235, 221, 0.1);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tabButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(215, 38, 56, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.tabButton:hover::before {
+  left: 100%;
+}
+
+.tabButton:hover {
+  border-color: #D72638;
+  color: #F5EBDD;
+  transform: translateY(-2px);
+}
+
+/* Active Tab */
+.tabButton.active {
+  background: linear-gradient(135deg, #D72638 0%, #A01D2A 100%);
+  color: #F5EBDD;
+  border-color: #D72638;
+  box-shadow: 0 8px 20px rgba(215, 38, 56, 0.3);
+}
+
+/* Tab Content */
+.tabContent {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .tabsContainer {
+    gap: 0.75rem;
+  }
+
+  .tabButton {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+  
+  .catalogueSection {
+    padding: 3rem 0;
+  }
 }

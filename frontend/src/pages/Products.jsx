@@ -6,6 +6,8 @@ import styles from './Products.module.css';
 
 const Products = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [activeTab, setActiveTab] = useState(0);
+  
   useScrollReveal('.reveal', { y: 60, stagger: 0.1 });
 
   const categories = [
@@ -83,51 +85,53 @@ const Products = () => {
   ];
 
   return (
-    <div className={styles.products} data-testid="products-page">
-      <section className={styles.hero} data-testid="products-hero">
+    <div className={styles.products}>
+      {/* Hero Section */}
+      <section className={styles.hero}>
         <div className={styles.heroOverlay}></div>
         <div className={styles.heroContent}>
-          <h1 className="reveal">Our Products</h1>
-          <p className="reveal">Quality equipment for every business need</p>
+          <h1>Our Products</h1>
+          <p>Premium Refrigeration Solutions for Every Need</p>
         </div>
       </section>
 
-      {categories.map((category, categoryIndex) => (
-        <section 
-          key={categoryIndex} 
-          className={`${styles.category} reveal`}
-          data-testid={`category-${categoryIndex}`}
-        >
-          <div className={styles.container}>
-            <div className={styles.categoryHeader}>
-              <h2>{category.name}</h2>
-            </div>
+      {/* Tabs Navigation */}
+      <section className={styles.catalogueSection}>
+        <div className={styles.container}>
+          <div className={styles.tabsContainer}>
+            {categories.map((category, index) => (
+              <button
+                key={index}
+                className={`${styles.tabButton} ${activeTab === index ? styles.active : ''}`}
+                onClick={() => setActiveTab(index)}
+              >
+                {category.name}
+              </button>
+            ))}
+          </div>
+
+          {/* Tab Content */}
+          <div className={styles.tabContent}>
             <div className={styles.productsGrid}>
-              {category.products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  image={product.image}
-                  title={product.title}
-                  description={product.description}
-                  onClick={() => setSelectedProduct(product)}
-                />
+              {categories[activeTab].products.map((product) => (
+                <div key={product.id} className="reveal">
+                  <ProductCard
+                    {...product}
+                    onClick={() => setSelectedProduct(product)}
+                  />
+                </div>
               ))}
             </div>
           </div>
-        </section>
-      ))}
+        </div>
+      </section>
 
+      {/* Modal for Product Details */}
       {selectedProduct && (
-        <Modal
-          isOpen={!!selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-          title={selectedProduct.title}
-        >
-          <img src={selectedProduct.image} alt={selectedProduct.title} style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
+        <Modal onClose={() => setSelectedProduct(null)}>
+          <img src={selectedProduct.image} alt={selectedProduct.title} />
+          <h2>{selectedProduct.title}</h2>
           <p>{selectedProduct.details}</p>
-          <p style={{ marginTop: '1rem', color: '#D72638', fontWeight: 600 }}>
-            Contact us for pricing and customization options
-          </p>
         </Modal>
       )}
     </div>
