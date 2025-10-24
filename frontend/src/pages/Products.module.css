@@ -43,59 +43,62 @@
   color: rgba(245, 235, 221, 0.7);
 }
 
-.category {
-  padding: 5rem 0;
+/* Loading State */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
 }
 
-.category:nth-child(even) {
-  background: rgba(245, 235, 221, 0.02);
+.spinner {
+  color: #D72638;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingContainer p {
+  color: rgba(245, 235, 221, 0.7);
+  font-size: 1.1rem;
+}
+
+/* Empty State */
+.emptyState {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.emptyState p {
+  color: rgba(245, 235, 221, 0.7);
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.emptySubtext {
+  color: rgba(245, 235, 221, 0.5);
+  font-size: 1rem;
+}
+
+.catalogueSection {
+  padding: 5rem 0;
+  min-height: 60vh;
 }
 
 .container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 2rem;
-}
-
-.categoryHeader {
-  margin-bottom: 3rem;
-  text-align: center;
-}
-
-.categoryHeader h2 {
-  font-size: clamp(2rem, 4vw, 3rem);
-  color: #F5EBDD;
-  font-weight: 700;
-  font-family: 'Space Grotesk', sans-serif;
-  position: relative;
-  display: inline-block;
-  padding-bottom: 1rem;
-}
-
-.categoryHeader h2::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 3px;
-  background: #D72638;
-}
-
-.productsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2.5rem;
-}
-
-@media (max-width: 768px) {
-  .productsGrid {
-    grid-template-columns: 1fr;
-  }
-}.catalogueSection {
-  padding: 5rem 0;
-  min-height: 60vh;
 }
 
 /* Tabs Container */
@@ -169,8 +172,18 @@
   }
 }
 
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2.5rem;
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
+  .productsGrid {
+    grid-template-columns: 1fr;
+  }
+
   .tabsContainer {
     gap: 0.75rem;
   }
