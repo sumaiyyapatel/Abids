@@ -1,49 +1,57 @@
-import { useEffect } from 'react';
-import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
 
 export const useScreenshotProtection = () => {
+  const [skeletonActive, setSkeletonActive] = useState(false);
+
   useEffect(() => {
+    const showSkeleton = () => {
+      setSkeletonActive(true);
+      setTimeout(() => setSkeletonActive(false), 1500); // show skeleton for 1.5s
+    };
+
     const handleKeyDown = (e) => {
-      // Detect PrintScreen key
-      if (e.key === 'PrintScreen') {
-        navigator.clipboard.writeText('');
-        toast.error('Screenshots are not allowed on this page');
-      }
-      
-      // Detect Ctrl+Shift+S (Firefox screenshot)
+      // PrintScreen
+      if (e.key === 'PrintScreen') showSkeleton();
+
+      // Ctrl+Shift+S (Firefox screenshot)
       if (e.ctrlKey && e.shiftKey && e.key === 'S') {
         e.preventDefault();
-        toast.error('Screenshots are not allowed on this page');
+        showSkeleton();
       }
-      
-      // Detect Cmd+Shift+3/4/5 (Mac screenshot)
+
+      // Cmd+Shift+3/4/5 (Mac screenshot)
       if (e.metaKey && e.shiftKey && ['3', '4', '5'].includes(e.key)) {
         e.preventDefault();
-        toast.error('Screenshots are not allowed on this page');
+        showSkeleton();
       }
     };
 
     const handleVisibilityChange = () => {
-      if (document.hidden) {
-        // Page might be hidden for screenshot
-        toast.error('Screenshots are not allowed');
-      }
+      if (document.hidden) showSkeleton();
+    };
+
+    const handleContextMenu = (e) => {
+      e.preventDefault();
+      showSkeleton();
+    };
+
+    const handleCopy = (e) => {
+      e.preventDefault();
+      showSkeleton();
     };
 
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    // Disable right-click context menu
-    const handleContextMenu = (e) => {
-      e.preventDefault();
-      toast.error('Right-click is disabled');
-    };
     document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener('copy', handleCopy);
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('copy', handleCopy);
     };
   }, []);
+
+  return skeletonActive;
 };

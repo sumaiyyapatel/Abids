@@ -17,12 +17,6 @@ import { Textarea } from '@/components/UI/textarea';
 import { toast } from 'sonner';
 import { LogOut, Plus, Trash2, Edit, Upload, X } from 'lucide-react';
 import styles from './Admin.module.css';
-import { 
-  handleFirebaseError, 
-  uploadImageWithRetry, 
-  firestoreOperation,
-  initializeFirebaseWithValidation 
-} from '@/utils/firebaseUtils';
 
 const Admin = () => {
   const [user, setUser] = useState(null);
@@ -44,12 +38,6 @@ const Admin = () => {
   const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
-    const initializeApp = async () => {
-      await initializeFirebaseWithValidation(db, auth, storage);
-    };
-    
-    initializeApp();
-    
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
@@ -61,32 +49,23 @@ const Admin = () => {
 
   const loadData = async () => {
     try {
-      await firestoreOperation(async () => {
-        // Load products
-        const productsSnap = await getDocs(collection(db, 'products'));
-        setProducts(productsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      }, 'Loading products');
-
-      await firestoreOperation(async () => {
-        // Load projects
-        const projectsSnap = await getDocs(collection(db, 'projects'));
-        setProjects(projectsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      }, 'Loading projects');
-
-      await firestoreOperation(async () => {
-        // Load testimonials
-        const testimonialsSnap = await getDocs(collection(db, 'testimonials'));
-        setTestimonials(testimonialsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      }, 'Loading testimonials');
-
-      await firestoreOperation(async () => {
-        // Load categories
-        const categoriesSnap = await getDocs(collection(db, 'categories'));
-        setCategories(categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      }, 'Loading categories');
+      // Load products
+      const productsSnap = await getDocs(collection(db, 'products'));
+      setProducts(productsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      
+      // Load projects
+      const projectsSnap = await getDocs(collection(db, 'projects'));
+      setProjects(projectsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      
+      // Load testimonials
+      const testimonialsSnap = await getDocs(collection(db, 'testimonials'));
+      setTestimonials(testimonialsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      
+      // Load categories
+      const categoriesSnap = await getDocs(collection(db, 'categories'));
+      setCategories(categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     } catch (error) {
-      console.error('Failed to load some data:', error);
-      // Error already handled by firestoreOperation
+      toast.error('Failed to load data: ' + error.message);
     }
   };
 
@@ -97,7 +76,7 @@ const Admin = () => {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success('Logged in successfully');
     } catch (error) {
-      handleFirebaseError(error, 'Login');
+      toast.error('Login failed: ' + error.message);
     }
     setLoading(false);
   };
@@ -114,14 +93,10 @@ const Admin = () => {
   const handleImageUpload = async (file) => {
     if (!file) return null;
     
-    try {
-      const path = `images/${Date.now()}_${file.name}`;
-      const downloadURL = await uploadImageWithRetry(storage, file, path);
-      return downloadURL;
-    } catch (error) {
-      handleFirebaseError(error, 'Image upload');
-      throw error;
-    }
+    const storageRef = ref(storage, `images/${Date.now()}_${file.name}`);
+    await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(storageRef);
+    return downloadURL;
   };
 
   const handleImageChange = (e) => {
@@ -154,25 +129,22 @@ const Admin = () => {
         updatedAt: serverTimestamp()
       };
 
-      await firestoreOperation(async () => {
-        if (editingItem) {
-          // Update existing
-          const docRef = doc(db, activeTab, editingItem.id);
-          await updateDoc(docRef, dataToSave);
-          toast.success('Updated successfully');
-        } else {
-          // Create new
-          dataToSave.createdAt = serverTimestamp();
-          await addDoc(collection(db, activeTab), dataToSave);
-          toast.success('Created successfully');
-        }
-      }, editingItem ? 'Update' : 'Create');
+      if (editingItem) {
+        // Update existing
+        const docRef = doc(db, activeTab, editingItem.id);
+        await updateDoc(docRef, dataToSave);
+        toast.success('Updated successfully');
+      } else {
+        // Create new
+        dataToSave.createdAt = serverTimestamp();
+        await addDoc(collection(db, activeTab), dataToSave);
+        toast.success('Created successfully');
+      }
 
       resetForm();
       loadData();
     } catch (error) {
-      console.error('Save operation failed:', error);
-      // Error already handled by handleImageUpload or firestoreOperation
+      toast.error('Save failed: ' + error.message);
     }
     setLoading(false);
   };
@@ -182,14 +154,11 @@ const Admin = () => {
     
     setLoading(true);
     try {
-      await firestoreOperation(async () => {
-        await deleteDoc(doc(db, activeTab, id));
-        toast.success('Deleted successfully');
-      }, 'Delete');
+      await deleteDoc(doc(db, activeTab, id));
+      toast.success('Deleted successfully');
       loadData();
     } catch (error) {
-      console.error('Delete operation failed:', error);
-      // Error already handled by firestoreOperation
+      toast.error('Delete failed: ' + error.message);
     }
     setLoading(false);
   };

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useScrollReveal, useHeroAnimation } from '@/hooks/useGsapAnimations';
 import { useScreenshotProtection } from '@/hooks/useScreenshotProtection';
 import { ArrowRight, CheckCircle, Phone } from 'lucide-react';
@@ -7,11 +7,27 @@ import Testimonials3D from '@/components/UI/Testimonials3D';
 import BrandMarquee from '@/components/UI/BrandMarquee';
 import ProductCard from '@/components/UI/ProductCard';
 import styles from './Home.module.css';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/firebase';
 
 const Home = () => {
   useHeroAnimation();
   useScrollReveal('.reveal', { y: 80, stagger: 0.15 });
   useScreenshotProtection();
+  const [testimonials, setTestimonials] = useState([]);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, 'testimonials'));
+        setTestimonials(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      } catch (error) {
+        console.error('Error fetching testimonials:', error);
+      }
+    };
+    fetchTestimonials();
+  }, []);
+
 
   const stats = [
     { value: '28+', label: 'Years Experience' },
@@ -38,36 +54,7 @@ const Home = () => {
     }
   ];
 
-  const testimonials = [
-    {
-      name: 'KUBER SINGH',
-      location: 'BHOPAL',
-      company: 'KUBER DAIRY',
-      text: 'Trustworthy products and even better service! We have purchased multiple units from Abid Refrigeration.',
-      image: 'https://i0.wp.com/abidnagpur.com/wp-content/uploads/2025/08/C0051T01.jpg-1.webp'
-    },
-    {
-      name: 'SOURABH TANEJA',
-      location: 'BHOPAL',
-      company: 'CHEENI KUM',
-      text: 'We opened a bakery and gave the full project to Abid Refrigeration. Everything was installed smoothly.',
-      image: 'https://i0.wp.com/abidnagpur.com/wp-content/uploads/2025/08/C0069T01.jpg-1.webp'
-    },
-    {
-      name: 'Mohd Abdul Majeed',
-      location: 'HYDERABAD',
-      company: 'PISTA HOUSE',
-      text: 'We trusted Abid Refrigeration with our entire kitchen setup, and they exceeded our expectations.',
-      image: 'https://i0.wp.com/abidnagpur.com/wp-content/uploads/2025/08/download-4.jpeg'
-    },
-    {
-      name: 'MR SACHIN',
-      location: 'YAVATMAL',
-      company: 'PISTA SHOP',
-      text: 'We have been using vertical cake display for over 6 months now, and it works flawlessly.',
-      image: 'https://i0.wp.com/abidnagpur.com/wp-content/uploads/2025/08/C0107T01.jpg-1.webp'
-    }
-  ];
+
 
   const brands = [
     { name: 'Haldiram', logo: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=200&h=100&fit=crop' },
@@ -107,23 +94,20 @@ const Home = () => {
           <div className={styles.heroText}>
             <h1 className="hero-title" data-testid="hero-title">
               <span className={styles.heroSubtext}>Experience the Art of</span>
-              <span className={styles.heroMainText}>Precision Cooling With </span>
-              <span className={styles.heroAccent}>ABID REFRIGERATION AND ENGINEERING</span>
+              <span className={styles.heroMainText}>Precision Cooling</span>
+              <span className={styles.heroAccent}>with ABID REFRIGERATION AND ENGINEERING</span>
             </h1>
             <p className="hero-subtitle" data-testid="hero-subtitle">
               Powering Professional Kitchens with Quality Equipment Since 1996
             </p>
-            <a
-              href="https://wa.link/ah95hi"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hero-cta"
-              data-testid="hero-cta-btn"
+            <Link
+              to="/contact"
+              className={`${styles.learnMore} hero-cta`}
+              data-testid="hero-contact-btn"
             >
-              <Link to="/contact" className={styles.learnMore} data-testid="hero-contact-btn">
-                Contact Us Now<ArrowRight size={18} />
-              </Link>
-            </a>
+              Contact Us Now <ArrowRight size={18} />
+            </Link>
+
           </div>
         </div>
       </section>

@@ -1,63 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useScrollReveal } from '@/hooks/useGsapAnimations';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/firebase';
 import Modal from '@/components/UI/Modal';
 import { ExternalLink } from 'lucide-react';
 import styles from './Projects.module.css';
 
+
 const Projects = () => {
+  const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
   useScrollReveal('.reveal', { y: 60, stagger: 0.12 });
 
-  const projects = [
-    {
-      id: 1,
-      name: 'Haldiram Restaurant',
-      location: 'Nagpur, Maharashtra',
-      category: 'Commercial Kitchen',
-      image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800',
-      description: 'Complete kitchen setup with refrigeration units and display counters for one of India\'s leading food chains.'
-    },
-    {
-      id: 2,
-      name: 'Theobroma Bakery',
-      location: 'Mumbai, Maharashtra',
-      category: 'Bakery Equipment',
-      image: 'https://i0.wp.com/abidnagpur.com/wp-content/uploads/2025/06/1-scaled.jpg',
-      description: 'Premium display counters and cake chillers for flagship store.'
-    },
-    {
-      id: 3,
-      name: 'Ajit Bakery',
-      location: 'Nagpur, Maharashtra',
-      category: 'Bakery Equipment',
-      image: 'https://i0.wp.com/abidnagpur.com/wp-content/uploads/2025/06/2-scaled.jpg',
-      description: 'Custom-built display units and refrigeration systems.'
-    },
-    {
-      id: 4,
-      name: 'Dhorajwala Sweets',
-      location: 'Nagpur, Maharashtra',
-      category: 'Sweet Shop',
-      image: 'https://i0.wp.com/abidnagpur.com/wp-content/uploads/2025/06/3-scaled.jpg',
-      description: 'Multi-tier display counters for traditional sweets.'
-    },
-    {
-      id: 5,
-      name: 'Delice Bakery',
-      location: 'Pune, Maharashtra',
-      category: 'Bakery Equipment',
-      image: 'https://i0.wp.com/abidnagpur.com/wp-content/uploads/2025/06/4-scaled.jpg',
-      description: 'Complete bakery equipment package including ovens and chillers.'
-    },
-    {
-      id: 6,
-      name: 'Pista House',
-      location: 'Hyderabad, Telangana',
-      category: 'Sweet Shop',
-      image: 'https://images.unsplash.com/photo-1556742044-3c52d6e88c62?w=800',
-      description: 'Large-scale refrigeration and display solutions for multiple outlets.'
-    }
-  ];
+  // ✅ Fetch projects from CMS
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, 'projects'));
+        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setProjects(data);
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+      }
+    };
+    fetchProjects();
+  }, []);
 
   return (
     <div className={styles.projects} data-testid="projects-page">
