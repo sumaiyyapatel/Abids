@@ -2,7 +2,7 @@
   width: 100%;
   overflow: hidden;
   background: rgba(245, 235, 221, 0.02);
-  padding: 3rem 0;
+  padding: 1rem 0;
   border-top: 1px solid rgba(245, 235, 221, 0.1);
   border-bottom: 1px solid rgba(245, 235, 221, 0.1);
   position: relative;
@@ -37,7 +37,7 @@
 
 .marquee {
   display: flex;
-  gap: 4rem;
+  gap: 2rem;
   animation: scroll 30s linear infinite;
   width: max-content;
 }
@@ -60,15 +60,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem 2rem;
+  padding: 1rem 1rem;
   min-width: 200px;
 }
 
 .logo {
-  height: 60px;
+  height: 80px;
   width: auto;
-  object-fit: contain;
-  opacity: 0.7;
+  object-fit: contain;;
   transition: all 0.4s ease;
 }
 

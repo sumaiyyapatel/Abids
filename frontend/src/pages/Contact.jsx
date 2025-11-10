@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useScrollReveal } from '@/hooks/useGsapAnimations';
-import { Phone, Mail, MapPin, Send } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/UI/button';
 import { Input } from '@/components/UI/input';
 import { Textarea } from '@/components/UI/textarea';
@@ -9,28 +9,106 @@ import styles from './Contact.module.css';
 
 const Contact = () => {
   useScrollReveal('.reveal', { y: 60, stagger: 0.12 });
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
+    productInterest: '',
     message: ''
   });
-  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const WHATSAPP_NUMBER = '919284511499';
+
+  const productCategories = [
+    'Display Counters',
+    'Kitchen Equipment',
+    'Food Carts',
+    'Custom Solution',
+    'General Inquiry'
+  ];
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: '' });
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const validateForm = () => {
+    const newErrors = {};
     
-    // Simulate form submission
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+    
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    } else if (!/^\d{10}$/.test(formData.phone.replace(/\s/g, ''))) {
+      newErrors.phone = 'Please enter a valid 10-digit phone number';
+    }
+    
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      toast.error('Please fill in all required fields correctly');
+      return;
+    }
+
+    // Create formatted WhatsApp message
+    const messageLines = [
+      '*New Inquiry from Website*',
+      '',
+      `*Name:* ${formData.name}`,
+      `*Phone:* ${formData.phone}`,
+    ];
+
+    if (formData.email) {
+      messageLines.push(`*Email:* ${formData.email}`);
+    }
+
+    if (formData.productInterest) {
+      messageLines.push(`*Interested In:* ${formData.productInterest}`);
+    }
+
+    messageLines.push('', '*Message:*', formData.message);
+
+    const whatsappMessage = messageLines.join('\n');
+    const encodedMessage = encodeURIComponent(whatsappMessage);
+    const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+    
+    // Open WhatsApp in new tab
+    window.open(whatsappURL, '_blank');
+    
+    // Show success message
+    toast.success('Redirecting to WhatsApp...');
+    
+    // Reset form after a short delay
     setTimeout(() => {
-      toast.success('Message sent successfully! We will contact you soon.');
-      setFormData({ name: '', email: '', phone: '', message: '' });
-      setLoading(false);
-    }, 1500);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        productInterest: '',
+        message: ''
+      });
+      setErrors({});
+    }, 500);
   };
 
   const contactInfo = [
@@ -95,16 +173,14 @@ const Contact = () => {
 
               <div className={styles.whatsapp}>
                 <a 
-                  href="https://wa.link/ah95hi" 
+                  href={`https://wa.me/${WHATSAPP_NUMBER}`}
                   target="_blank" 
                   rel="noopener noreferrer"
                   className={styles.whatsappBtn}
                   data-testid="whatsapp-btn"
                 >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                  </svg>
-                  <span>Message on WhatsApp</span>
+                  <MessageCircle size={24} />
+                  <span>Chat Directly on WhatsApp</span>
                 </a>
               </div>
             </div>
@@ -113,6 +189,7 @@ const Contact = () => {
             <div className={`${styles.formSection} reveal`}>
               <form onSubmit={handleSubmit} className={styles.form} data-testid="contact-form">
                 <h2>Send us a Message</h2>
+                <p className={styles.formSubtext}>Fill the form and click send to continue on WhatsApp</p>
                 
                 <div className={styles.formGroup}>
                   <label htmlFor="name">Full Name *</label>
@@ -122,66 +199,98 @@ const Contact = () => {
                     type="text"
                     value={formData.name}
                     onChange={handleChange}
-                    required
                     className={styles.input}
+                    placeholder="Enter your full name"
                     data-testid="name-input"
                   />
+                  {errors.name && (
+                    <span className={styles.error}>{errors.name}</span>
+                  )}
+                </div>
+
+                <div className={styles.formRow}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="phone">Phone Number *</label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className={styles.input}
+                      placeholder="10-digit mobile number"
+                      data-testid="phone-input"
+                    />
+                    {errors.phone && (
+                      <span className={styles.error}>{errors.phone}</span>
+                    )}
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="email">Email Address</label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={styles.input}
+                      placeholder="your@email.com (optional)"
+                      data-testid="email-input"
+                    />
+                    {errors.email && (
+                      <span className={styles.error}>{errors.email}</span>
+                    )}
+                  </div>
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label htmlFor="email">Email Address *</label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
+                  <label htmlFor="productInterest">Interested In</label>
+                  <select
+                    id="productInterest"
+                    name="productInterest"
+                    value={formData.productInterest}
                     onChange={handleChange}
-                    required
-                    className={styles.input}
-                    data-testid="email-input"
-                  />
+                    className={styles.select}
+                  >
+                    <option value="">Select a category (optional)</option>
+                    {productCategories.map((category, index) => (
+                      <option key={index} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label htmlFor="phone">Phone Number</label>
-                  <Input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className={styles.input}
-                    data-testid="phone-input"
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="message">Message *</label>
+                  <label htmlFor="message">Your Message *</label>
                   <Textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    required
                     rows={5}
                     className={styles.textarea}
+                    placeholder="Tell us about your requirements..."
                     data-testid="message-textarea"
                   />
+                  {errors.message && (
+                    <span className={styles.error}>{errors.message}</span>
+                  )}
                 </div>
 
                 <Button 
                   type="submit" 
                   className={styles.submitBtn}
-                  disabled={loading}
                   data-testid="submit-btn"
                 >
-                  {loading ? 'Sending...' : (
-                    <>
-                      <Send size={18} />
-                      <span>Send Message</span>
-                    </>
-                  )}
+                  <Send size={18} />
+                  <span>Send via WhatsApp</span>
                 </Button>
+
+                <p className={styles.disclaimer}>
+                  By clicking send, you'll be redirected to WhatsApp with your message pre-filled
+                </p>
               </form>
             </div>
           </div>

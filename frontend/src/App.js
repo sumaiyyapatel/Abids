@@ -11,11 +11,13 @@ import Contact from '@/pages/Contact';
 import Admin from '@/pages/Admin';
 import '@/i18n';
 import '@/App.css';
-
+import { useScreenshotProtection } from './hooks/useScreenshotProtection';
 function App() {
+  useScreenshotProtection();
+
   return (
     <div className="App">
-      <BrowserRouter>
+      {/* Your app content */}<BrowserRouter>
         <Header />
         <main className="main-content">
           <Routes>

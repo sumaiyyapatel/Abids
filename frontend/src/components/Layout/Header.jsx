@@ -34,8 +34,7 @@ const Header = () => {
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`} data-testid="main-header">
       <div className={styles.container}>
         <Link to="/" className={styles.logo} data-testid="logo-link">
-          <span className={styles.logoText}>ABID</span>
-          <span className={styles.logoSub}>Refrigeration</span>
+          <img src="/assets/logo.png" alt="Company Logo" className={styles.logoImage} />
         </Link>
 
         <nav className={`${styles.nav} ${mobileMenuOpen ? styles.mobileOpen : ''}`} data-testid="main-nav">
@@ -50,8 +49,8 @@ const Header = () => {
               {link.label}
             </Link>
           ))}
-          <button 
-            onClick={toggleLanguage} 
+          <button
+            onClick={toggleLanguage}
             className={styles.langBtn}
             data-testid="language-toggle-btn"
           >

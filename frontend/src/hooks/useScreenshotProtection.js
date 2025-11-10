@@ -1,57 +1,63 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export const useScreenshotProtection = () => {
-  const [skeletonActive, setSkeletonActive] = useState(false);
-
   useEffect(() => {
-    const showSkeleton = () => {
-      setSkeletonActive(true);
-      setTimeout(() => setSkeletonActive(false), 1500); // show skeleton for 1.5s
+    const showBlur = () => {
+      document.body.style.transition = 'filter 0.2s';
+      document.body.style.filter = 'blur(8px) brightness(0.7)';
+      setTimeout(() => {
+        document.body.style.filter = '';
+      }, 1500); // blur lasts 1.5 seconds
     };
 
     const handleKeyDown = (e) => {
-      // PrintScreen
-      if (e.key === 'PrintScreen') showSkeleton();
+      // PrintScreen key
+      if (e.key === 'PrintScreen') showBlur();
 
       // Ctrl+Shift+S (Firefox screenshot)
-      if (e.ctrlKey && e.shiftKey && e.key === 'S') {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 's') {
         e.preventDefault();
-        showSkeleton();
+        showBlur();
       }
 
       // Cmd+Shift+3/4/5 (Mac screenshot)
       if (e.metaKey && e.shiftKey && ['3', '4', '5'].includes(e.key)) {
         e.preventDefault();
-        showSkeleton();
+        showBlur();
       }
     };
 
     const handleVisibilityChange = () => {
-      if (document.hidden) showSkeleton();
-    };
-
-    const handleContextMenu = (e) => {
-      e.preventDefault();
-      showSkeleton();
+      if (document.hidden) showBlur();
     };
 
     const handleCopy = (e) => {
       e.preventDefault();
-      showSkeleton();
+      showBlur();
     };
 
+    const handleDrag = (e) => {
+      e.preventDefault();
+    };
+
+    const handleSelect = (e) => {
+      e.preventDefault();
+    };
+
+    // Event listeners
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    document.addEventListener('contextmenu', handleContextMenu);
     document.addEventListener('copy', handleCopy);
+    document.addEventListener('dragstart', handleDrag);
+    document.addEventListener('selectstart', handleSelect);
 
+    // Cleanup
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      document.removeEventListener('contextmenu', handleContextMenu);
       document.removeEventListener('copy', handleCopy);
+      document.removeEventListener('dragstart', handleDrag);
+      document.removeEventListener('selectstart', handleSelect);
     };
   }, []);
-
-  return skeletonActive;
 };

@@ -32,6 +32,13 @@
   transition: transform 0.3s ease;
 }
 
+.logoImage {
+  height: 50px; /* or 40px depending on navbar height */
+  width: auto; /* maintain aspect ratio */
+  object-fit: contain;
+  display: block;
+}
+
 .logo:hover {
   transform: translateY(-2px);
 }
