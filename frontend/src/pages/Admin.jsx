@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
-import { 
-  collection, 
-  getDocs, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
+import {
+  collection,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
   doc,
-  serverTimestamp 
+  serverTimestamp
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { auth, db, storage } from '@/firebase';
@@ -19,18 +20,19 @@ import { LogOut, Plus, Trash2, Edit, Upload, X } from 'lucide-react';
 import styles from './Admin.module.css';
 
 const Admin = () => {
+  const { t } = useTranslation();
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('products');
-  
+
   // Data states
   const [products, setProducts] = useState([]);
   const [projects, setProjects] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
   const [categories, setCategories] = useState([]);
-  
+
   // Form states
   const [editingItem, setEditingItem] = useState(null);
   const [formData, setFormData] = useState({});
@@ -52,20 +54,20 @@ const Admin = () => {
       // Load products
       const productsSnap = await getDocs(collection(db, 'products'));
       setProducts(productsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      
+
       // Load projects
       const projectsSnap = await getDocs(collection(db, 'projects'));
       setProjects(projectsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      
+
       // Load testimonials
       const testimonialsSnap = await getDocs(collection(db, 'testimonials'));
       setTestimonials(testimonialsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      
+
       // Load categories
       const categoriesSnap = await getDocs(collection(db, 'categories'));
       setCategories(categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     } catch (error) {
-      toast.error('Failed to load data: ' + error.message);
+      toast.error(t('Failed to load data: ') + error.message);
     }
   };
 
@@ -74,9 +76,9 @@ const Admin = () => {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      toast.success('Logged in successfully');
+      toast.success(t('Logged in successfully'));
     } catch (error) {
-      toast.error('Login failed: ' + error.message);
+      toast.error(t('Login failed: ') + error.message);
     }
     setLoading(false);
   };
@@ -84,15 +86,15 @@ const Admin = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      toast.success('Logged out successfully');
+      toast.success(t('Logged out successfully'));
     } catch (error) {
-      toast.error('Logout failed');
+      toast.error(t('Logout failed'));
     }
   };
 
   const handleImageUpload = async (file) => {
     if (!file) return null;
-    
+
     const storageRef = ref(storage, `images/${Date.now()}_${file.name}`);
     await uploadBytes(storageRef, file);
     const downloadURL = await getDownloadURL(storageRef);
@@ -117,7 +119,7 @@ const Admin = () => {
 
     try {
       let imageUrl = formData.image;
-      
+
       // Upload new image if selected
       if (imageFile) {
         imageUrl = await handleImageUpload(imageFile);
@@ -133,32 +135,32 @@ const Admin = () => {
         // Update existing
         const docRef = doc(db, activeTab, editingItem.id);
         await updateDoc(docRef, dataToSave);
-        toast.success('Updated successfully');
+        toast.success(t('Updated successfully'));
       } else {
         // Create new
         dataToSave.createdAt = serverTimestamp();
         await addDoc(collection(db, activeTab), dataToSave);
-        toast.success('Created successfully');
+        toast.success(t('Created successfully'));
       }
 
       resetForm();
       loadData();
     } catch (error) {
-      toast.error('Save failed: ' + error.message);
+      toast.error(t('Save failed: ') + error.message);
     }
     setLoading(false);
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this item?')) return;
-    
+    if (!window.confirm(t('Are you sure you want to delete this item?'))) return;
+
     setLoading(true);
     try {
       await deleteDoc(doc(db, activeTab, id));
-      toast.success('Deleted successfully');
+      toast.success(t('Deleted successfully'));
       loadData();
     } catch (error) {
-      toast.error('Delete failed: ' + error.message);
+      toast.error(t('Delete failed: ') + error.message);
     }
     setLoading(false);
   };
@@ -181,10 +183,10 @@ const Admin = () => {
       case 'products':
         return (
           <form onSubmit={handleSubmit} className={styles.cmsForm}>
-            <h3>{editingItem ? 'Edit Product' : 'Add Product'}</h3>
-            
+            <h3>{editingItem ? t('Edit Product') : t('Add Product')}</h3>
+
             <div className={styles.formGroup}>
-              <label>Title *</label>
+              <label>{t('Title *')}</label>
               <Input
                 value={formData.title || ''}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -193,7 +195,7 @@ const Admin = () => {
             </div>
 
             <div className={styles.formGroup}>
-              <label>Description *</label>
+              <label>{t('Description *')}</label>
               <Textarea
                 value={formData.description || ''}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -202,22 +204,22 @@ const Admin = () => {
             </div>
 
             <div className={styles.formGroup}>
-              <label>Category *</label>
+              <label>{t('Category *')}</label>
               <select
                 className={styles.select}
                 value={formData.category || ''}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 required
               >
-                <option value="">Select Category</option>
-                <option value="Display Counters">Display Counters</option>
-                <option value="Kitchen Equipment">Kitchen Equipment</option>
-                <option value="Food Carts">Food Carts</option>
+                <option value="">{t('Select Category')}</option>
+                <option value="Display Counters">{t('Display Counters')}</option>
+                <option value="Kitchen Equipment">{t('Kitchen Equipment')}</option>
+                <option value="Food Carts">{t('Food Carts')}</option>
               </select>
             </div>
 
             <div className={styles.formGroup}>
-              <label>Details</label>
+              <label>{t('Details')}</label>
               <Textarea
                 value={formData.details || ''}
                 onChange={(e) => setFormData({ ...formData, details: e.target.value })}
@@ -226,7 +228,7 @@ const Admin = () => {
             </div>
 
             <div className={styles.formGroup}>
-              <label>Image</label>
+              <label>{t('Image')}</label>
               <input
                 type="file"
                 accept="image/*"
@@ -252,11 +254,11 @@ const Admin = () => {
 
             <div className={styles.formActions}>
               <Button type="submit" disabled={loading}>
-                {loading ? 'Saving...' : editingItem ? 'Update' : 'Create'}
+                {loading ? t('Saving...') : editingItem ? t('Update') : t('Create')}
               </Button>
               {editingItem && (
                 <Button type="button" onClick={resetForm} variant="outline">
-                  Cancel
+                  {t('Cancel')}
                 </Button>
               )}
             </div>
@@ -266,10 +268,10 @@ const Admin = () => {
       case 'projects':
         return (
           <form onSubmit={handleSubmit} className={styles.cmsForm}>
-            <h3>{editingItem ? 'Edit Project' : 'Add Project'}</h3>
-            
+            <h3>{editingItem ? t('Edit Project') : t('Add Project')}</h3>
+
             <div className={styles.formGroup}>
-              <label>Name *</label>
+              <label>{t('Name *')}</label>
               <Input
                 value={formData.name || ''}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -278,7 +280,7 @@ const Admin = () => {
             </div>
 
             <div className={styles.formGroup}>
-              <label>Location *</label>
+              <label>{t('Location *')}</label>
               <Input
                 value={formData.location || ''}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
@@ -325,7 +327,7 @@ const Admin = () => {
               </Button>
               {editingItem && (
                 <Button type="button" onClick={resetForm} variant="outline">
-                  Cancel
+                  {t('Cancel')}
                 </Button>
               )}
             </div>
@@ -335,8 +337,8 @@ const Admin = () => {
       case 'testimonials':
         return (
           <form onSubmit={handleSubmit} className={styles.cmsForm}>
-            <h3>{editingItem ? 'Edit Testimonial' : 'Add Testimonial'}</h3>
-            
+            <h3>{editingItem ? t('Edit Testimonial') : t('Add Testimonial')}</h3>
+
             <div className={styles.formGroup}>
               <label>Name *</label>
               <Input
@@ -356,7 +358,7 @@ const Admin = () => {
             </div>
 
             <div className={styles.formGroup}>
-              <label>Company *</label>
+              <label>{t('Company *')}</label>
               <Input
                 value={formData.company || ''}
                 onChange={(e) => setFormData({ ...formData, company: e.target.value })}
@@ -365,7 +367,7 @@ const Admin = () => {
             </div>
 
             <div className={styles.formGroup}>
-              <label>Testimonial Text *</label>
+              <label>{t('Testimonial Text *')}</label>
               <Textarea
                 value={formData.text || ''}
                 onChange={(e) => setFormData({ ...formData, text: e.target.value })}
@@ -395,7 +397,7 @@ const Admin = () => {
               </Button>
               {editingItem && (
                 <Button type="button" onClick={resetForm} variant="outline">
-                  Cancel
+                  {t('Cancel')}
                 </Button>
               )}
             </div>
@@ -455,11 +457,11 @@ const Admin = () => {
       <div className={styles.admin} data-testid="admin-page">
         <div className={styles.loginContainer}>
           <div className={styles.loginCard}>
-            <h1>Admin Login</h1>
-            <p>Access CMS Dashboard</p>
+            <h1>{t('Admin Login')}</h1>
+            <p>{t('Access CMS Dashboard')}</p>
             <form onSubmit={handleLogin} className={styles.loginForm}>
               <div className={styles.formGroup}>
-                <label>Email</label>
+                <label>{t('Email')}</label>
                 <Input
                   type="email"
                   value={email}
@@ -469,7 +471,7 @@ const Admin = () => {
                 />
               </div>
               <div className={styles.formGroup}>
-                <label>Password</label>
+                <label>{t('Password')}</label>
                 <Input
                   type="password"
                   value={password}
@@ -478,13 +480,13 @@ const Admin = () => {
                   data-testid="admin-password-input"
                 />
               </div>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={loading}
                 className={styles.loginBtn}
                 data-testid="admin-login-btn"
               >
-                {loading ? 'Logging in...' : 'Login'}
+                {loading ? t('Logging in...') : t('Login')}
               </Button>
             </form>
           </div>
@@ -497,31 +499,32 @@ const Admin = () => {
     <div className={styles.admin} data-testid="admin-dashboard">
       <div className={styles.dashboard}>
         <div className={styles.header}>
-          <h1>CMS Dashboard</h1>
+          <h1>{t('CMS Dashboard')}</h1>
           <Button onClick={handleLogout} className={styles.logoutBtn}>
             <LogOut size={18} />
-            <span>Logout</span>
+            <span>{t('Logout')}</span>
           </Button>
         </div>
 
         <div className={styles.tabs}>
-          <button 
+          <button
             className={activeTab === 'products' ? styles.active : ''}
             onClick={() => { setActiveTab('products'); resetForm(); }}
           >
-            Products
+
+            {t('Products')}
           </button>
-          <button 
+          <button
             className={activeTab === 'projects' ? styles.active : ''}
             onClick={() => { setActiveTab('projects'); resetForm(); }}
           >
-            Projects
+            {t('Projects')}
           </button>
-          <button 
+          <button
             className={activeTab === 'testimonials' ? styles.active : ''}
             onClick={() => { setActiveTab('testimonials'); resetForm(); }}
           >
-            Testimonials
+            {t('Testimonials')}
           </button>
         </div>
 
@@ -531,7 +534,7 @@ const Admin = () => {
               {renderForm()}
             </div>
             <div className={styles.listSection}>
-              <h3>Existing Items</h3>
+              <h3>{t('Existing Items')}</h3>
               {renderList()}
             </div>
           </div>

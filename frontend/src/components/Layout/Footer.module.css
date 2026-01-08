@@ -1,8 +1,8 @@
 .footer {
-  background: #1A1A1A;
-  color: #F5EBDD;
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
   padding: 4rem 0 2rem;
-  border-top: 1px solid rgba(245, 235, 221, 0.1);
+  border-top: 1px solid hsl(var(--border) / 0.1);
 }
 
 .container {
@@ -27,13 +27,13 @@
 .columnTitle {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #D72638;
+  color: hsl(var(--primary));
   margin: 0 0 0.5rem 0;
   letter-spacing: 0.05em;
 }
 
 .description {
-  color: rgba(245, 235, 221, 0.7);
+  color: hsl(var(--muted-foreground));
   line-height: 1.6;
   font-size: 0.95rem;
 }
@@ -50,18 +50,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(245, 235, 221, 0.05);
-  border: 1px solid rgba(245, 235, 221, 0.2);
+  background: hsl(var(--secondary) / 0.1);
+  border: 1px solid hsl(var(--border) / 0.2);
   border-radius: 8px;
-  color: #F5EBDD;
+  color: hsl(var(--muted-foreground));
   transition: all 0.3s ease;
 }
 
 .socialLink:hover {
-  background: #D72638;
-  border-color: #D72638;
+  background: hsl(var(--primary));
+  border-color: hsl(var(--primary));
   transform: translateY(-3px);
-  color: #1A1A1A;
+  color: hsl(var(--primary-foreground));
 }
 
 .footerNav {
@@ -71,7 +71,7 @@
 }
 
 .footerNav a {
-  color: rgba(245, 235, 221, 0.7);
+  color: hsl(var(--muted-foreground));
   text-decoration: none;
   font-size: 0.95rem;
   transition: all 0.3s ease;
@@ -79,7 +79,7 @@
 }
 
 .footerNav a:hover {
-  color: #D72638;
+  color: hsl(var(--primary));
   transform: translateX(5px);
 }
 
@@ -93,14 +93,14 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: rgba(245, 235, 221, 0.7);
+  color: hsl(var(--muted-foreground));
   text-decoration: none;
   font-size: 0.95rem;
   transition: color 0.3s ease;
 }
 
 .contactItem:hover {
-  color: #D72638;
+  color: hsl(var(--primary));
 }
 
 .bottom {
@@ -108,9 +108,9 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 2rem;
-  border-top: 1px solid rgba(245, 235, 221, 0.1);
+  border-top: 1px solid hsl(var(--border) / 0.1);
   font-size: 0.9rem;
-  color: rgba(245, 235, 221, 0.6);
+  color: hsl(var(--muted-foreground));
 }
 
 .bottomLinks {
@@ -119,13 +119,13 @@
 }
 
 .bottomLinks a {
-  color: rgba(245, 235, 221, 0.6);
+  color: hsl(var(--muted-foreground));
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .bottomLinks a:hover {
-  color: #D72638;
+  color: hsl(var(--primary));
 }
 
 @media (max-width: 768px) {

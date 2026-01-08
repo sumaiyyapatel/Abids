@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useScrollReveal, useHeroAnimation } from '@/hooks/useGsapAnimations';
 import { useScreenshotProtection } from '@/hooks/useScreenshotProtection';
 import { ArrowRight, CheckCircle, Phone } from 'lucide-react';
@@ -11,6 +12,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
 
 const Home = () => {
+  const { t } = useTranslation();
   useHeroAnimation();
   useScrollReveal('.reveal', { y: 80, stagger: 0.15 });
   useScreenshotProtection();
@@ -30,26 +32,26 @@ const Home = () => {
 
 
   const stats = [
-    { value: '28+', label: 'Years Experience' },
-    { value: '5000+', label: 'Happy Customers' },
-    { value: '15+', label: 'Cities Served' },
-    { value: '2+', label: 'Countries' }
+    { value: '28+', label: t('Years Experience') },
+    { value: '5000+', label: t('Happy Customers') },
+    { value: '15+', label: t('Cities Served') },
+    { value: '2+', label: t('Countries') }
   ];
 
   const features = [
     {
-      title: 'Food Carts',
-      description: 'Custom-built food carts designed for mobile kitchens with style and durability.',
+      title: t('Food Carts'),
+      description: t('Custom-built food carts designed for mobile kitchens with style and durability.'),
       image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800'
     },
     {
-      title: 'Display Counters',
-      description: 'Premium display counters to preserve freshness and enhance visual appeal.',
+      title: t('Display Counters'),
+      description: t('Premium display counters to preserve freshness and enhance visual appeal.'),
       image: 'https://images.unsplash.com/photo-1556742044-3c52d6e88c62?w=800'
     },
     {
-      title: 'Kitchen Equipment',
-      description: 'High-performance commercial kitchen solutions for restaurants and hotels.',
+      title: t('Kitchen Equipment'),
+      description: t('High-performance commercial kitchen solutions for restaurants and hotels.'),
       image: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?w=800'
     }
   ];
@@ -66,20 +68,20 @@ const Home = () => {
 
   const whyChoose = [
     {
-      title: 'Advanced Cooling Technology',
-      description: 'Modern refrigeration systems that save power and preserve quality.'
+      title: t('Advanced Cooling Technology'),
+      description: t('Modern refrigeration systems that save power and preserve quality.')
     },
     {
-      title: 'Timely Delivery & Installation',
-      description: 'Professional installation with no delays, just dependable service.'
+      title: t('Timely Delivery & Installation'),
+      description: t('Professional installation with no delays, just dependable service.')
     },
     {
-      title: '24/7 Support',
-      description: 'Reliable support even after delivery for maintenance and breakdowns.'
+      title: t('24/7 Support'),
+      description: t('Reliable support even after delivery for maintenance and breakdowns.')
     },
     {
-      title: 'Customized Solutions',
-      description: 'Every counter is made to match your business layout and goals.'
+      title: t('Customized Solutions'),
+      description: t('Every counter is made to match your business layout and goals.')
     }
   ];
 
@@ -93,19 +95,19 @@ const Home = () => {
         <div className={styles.heroContent}>
           <div className={styles.heroText}>
             <h1 className="hero-title" data-testid="hero-title">
-              <span className={styles.heroSubtext}>Experience the Art of</span>
-              <span className={styles.heroMainText}>Precision Cooling</span>
-              <span className={styles.heroAccent}>with ABID REFRIGERATION AND ENGINEERING</span>
+              <span className={styles.heroSubtext}>{t('Experience the Art of')}</span>
+              <span className={styles.heroMainText}>{t('Precision Cooling')}</span>
+              <span className={styles.heroAccent}>{t('with ABID REFRIGERATION AND ENGINEERING')}</span>
             </h1>
             <p className="hero-subtitle" data-testid="hero-subtitle">
-              Powering Professional Kitchens with Quality Equipment Since 1996
+              {t('Powering Professional Kitchens with Quality Equipment Since 1996')}
             </p>
             <Link
               to="/contact"
               className={`${styles.learnMore} hero-cta`}
               data-testid="hero-contact-btn"
             >
-              Contact Us Now <ArrowRight size={18} />
+              {t('Contact Us Now')} <ArrowRight size={18} />
             </Link>
 
           </div>
@@ -137,19 +139,15 @@ const Home = () => {
               />
             </div>
             <div className={styles.aboutContent}>
-              <h2>ABID REFRIGERATION & ENGINEERING PRIVATE LIMITED</h2>
+              <h2>{t('ABID REFRIGERATION & ENGINEERING PRIVATE LIMITED')}</h2>
               <p>
-                Founded in 1996 at Nagpur, Maharashtra, Abid Refrigeration is a renowned
-                manufacturer of Display Counters, Commercial Kitchen Products, and Food Carts.
-                We use 304 Food Grade raw materials and sophisticated technology to meet global standards.
+                {t('Founded in 1996 at Nagpur, Maharashtra, Abid Refrigeration is a renowned manufacturer of Display Counters, Commercial Kitchen Products, and Food Carts. We use 304 Food Grade raw materials and sophisticated technology to meet global standards.')}
               </p>
               <p>
-                Our products are acknowledged for supreme quality, durability, fine finish,
-                reliability, and easy installation. We offer standard and customized solutions
-                to meet your precise requirements.
+                {t('Our products are acknowledged for supreme quality, durability, fine finish, reliability, and easy installation. We offer standard and customized solutions to meet your precise requirements.')}
               </p>
               <Link to="/about" className={styles.learnMore} data-testid="learn-more-btn">
-                Learn More <ArrowRight size={18} />
+                {t('Learn More')} <ArrowRight size={18} />
               </Link>
             </div>
           </div>
@@ -160,8 +158,8 @@ const Home = () => {
       <section className={`${styles.products} reveal`} data-testid="products-section">
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <h2>What We Build</h2>
-            <p>Quality equipment tailored for your business needs</p>
+            <h2>{t('What We Build')}</h2>
+            <p>{t('Quality equipment tailored for your business needs')}</p>
           </div>
           <div className={styles.productsGrid}>
             {features.map((feature, index) => (
@@ -181,7 +179,7 @@ const Home = () => {
       <section className={`${styles.whyChoose} reveal`} data-testid="why-choose-section">
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <h2>Why Choose Us?</h2>
+            <h2>{t('Why Choose Us?')}</h2>
           </div>
           <div className={styles.whyGrid}>
             {whyChoose.map((item, index) => (
@@ -198,7 +196,7 @@ const Home = () => {
       <section className={styles.brands} data-testid="brands-section">
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <h2>Trusted by Leading Brands</h2>
+            <h2>{t('Trusted by Leading Brands')}</h2>
           </div>
         </div>
         <BrandMarquee brands={brands} />
@@ -208,8 +206,8 @@ const Home = () => {
       <section className={`${styles.testimonials} reveal`} data-testid="testimonials-section">
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <h2>What Our Clients Say</h2>
-            <p>Trusted by businesses across India</p>
+            <h2>{t('What Our Clients Say')}</h2>
+            <p>{t('Trusted by businesses across India')}</p>
           </div>
           <Testimonials3D testimonials={testimonials} />
         </div>
@@ -220,8 +218,8 @@ const Home = () => {
       <section className={`${styles.cta} reveal`} data-testid="cta-section">
         <div className={styles.container}>
           <div className={styles.ctaContent}>
-            <h2>Ready to Upgrade Your Kitchen?</h2>
-            <p>Contact us today for customized solutions</p>
+            <h2>{t('Ready to Upgrade Your Kitchen?')}</h2>
+            <p>{t('Contact us today for customized solutions')}</p>
             <div className={styles.ctaButtons}>
               <a
                 href="tel:+919876543210"
@@ -229,14 +227,14 @@ const Home = () => {
                 data-testid="cta-call-btn"
               >
                 <Phone size={20} />
-                <span>Call Now</span>
+                <span>{t('Call Now')}</span>
               </a>
               <Link
                 to="/contact"
                 className={`${styles.ctaBtn} ${styles.secondary}`}
                 data-testid="cta-contact-btn"
               >
-                Get Quote
+                {t('Get Quote')}
               </Link>
             </div>
           </div>

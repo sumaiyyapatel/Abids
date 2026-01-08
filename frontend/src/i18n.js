@@ -1,61 +1,29 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import SimpleBackend from './utils/SimpleBackend';
 
-const resources = {
-  en: {
-    translation: {
-      nav: {
-        home: 'Home',
-        about: 'About',
-        products: 'Products',
-        projects: 'Projects',
-        contact: 'Contact'
-      },
-      hero: {
-        title: 'Experience the Art of',
-        subtitle: 'Precision Cooling',
-        cta: 'Contact Us Now'
-      },
-      about: {
-        title: 'About Us',
-        description: 'Founded in 1996, Abid Refrigeration Engineering Private Limited'
-      },
-      products: {
-        title: 'Our Products',
-        viewDetails: 'View Details'
-      },
-      contact: {
-        title: 'Get In Touch',
-        submit: 'Send Message'
-      }
-    }
-  },
-  hi: {
-    translation: {
-      nav: {
-        home: 'होम',
-        about: 'हमारे बारे में',
-        products: 'उत्पाद',
-        projects: 'परियोजनाएं',
-        contact: 'संपर्क करें'
-      },
-      hero: {
-        title: 'प्रिसिजन कूलिंग',
-        subtitle: 'की कला का अनुभव करें',
-        cta: 'अभी संपर्क करें'
-      }
-    }
-  }
-};
+const supportedLngs = [
+  'en', 'es', 'de', 'fr', 'hi', 'ur', 'bn', 'pa', 'mr', 'gu',
+  'ta', 'te', 'kn', 'ml', 'or', 'as', 'si', 'ne', 'ar', 'pt', 'ru', 'fa'
+];
 
 i18n
+  .use(SimpleBackend)
   .use(initReactI18next)
   .init({
-    resources,
     lng: 'en',
     fallbackLng: 'en',
+    supportedLngs,
+    // saveMissing: true, // Disabled for static strategy
     interpolation: {
       escapeValue: false
+    },
+    react: {
+      useSuspense: true, // Re-enable suspense if desired, or keep false
+      bindI18n: 'languageChanged loaded',
+    },
+    backend: {
+      loadPath: '/locales/{{lng}}/{{ns}}.json'
     }
   });
 

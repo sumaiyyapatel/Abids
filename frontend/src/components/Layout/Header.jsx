@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import LanguageSelector from '@/components/UI/LanguageSelector';
 import styles from './Header.module.css';
+import { ModeToggle } from '@/components/UI/ModeToggle';
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -19,22 +21,20 @@ const Header = () => {
   }, []);
 
   const navLinks = [
-    { path: '/', label: t('nav.home') },
-    { path: '/about', label: t('nav.about') },
-    { path: '/products', label: t('nav.products') },
-    { path: '/projects', label: t('nav.projects') },
-    { path: '/contact', label: t('nav.contact') }
+    { path: '/', label: t('Home') },
+    { path: '/about', label: t('About') },
+    { path: '/products', label: t('Products') },
+    { path: '/projects', label: t('Projects') },
+    { path: '/contact', label: t('Contact') }
   ];
 
-  const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language === 'en' ? 'hi' : 'en');
-  };
+
 
   return (
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`} data-testid="main-header">
       <div className={styles.container}>
         <Link to="/" className={styles.logo} data-testid="logo-link">
-          <img src="/assets/logo.png" alt="Company Logo" className={styles.logoImage} />
+          <img src="/assets/logo.png" alt={t('Company Logo')} className={styles.logoImage} />
         </Link>
 
         <nav className={`${styles.nav} ${mobileMenuOpen ? styles.mobileOpen : ''}`} data-testid="main-nav">
@@ -49,13 +49,10 @@ const Header = () => {
               {link.label}
             </Link>
           ))}
-          <button
-            onClick={toggleLanguage}
-            className={styles.langBtn}
-            data-testid="language-toggle-btn"
-          >
-            {i18n.language === 'en' ? 'हिं' : 'EN'}
-          </button>
+          <div className="flex items-center gap-2 ml-4">
+            <ModeToggle />
+            <LanguageSelector />
+          </div>
         </nav>
 
         <button

@@ -12,8 +12,8 @@ html {
 
 body {
   font-family: 'Inter', sans-serif;
-  background: #0D0D0D;
-  color: #F5EBDD;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
   overflow-x: hidden;
 }
 
@@ -34,16 +34,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1A1A1A;
+  background: hsl(var(--secondary));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #D72638;
+  background: hsl(var(--primary));
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #E83345;
+  background: hsl(var(--primary) / 0.8);
 }
 
 /* Selection */

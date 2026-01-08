@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useScrollReveal } from '@/hooks/useGsapAnimations';
+import { useTranslation } from 'react-i18next';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
 import Modal from '@/components/UI/Modal';
@@ -8,6 +9,7 @@ import styles from './Projects.module.css';
 
 
 const Projects = () => {
+  const { t } = useTranslation();
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
   useScrollReveal('.reveal', { y: 60, stagger: 0.12 });
@@ -31,8 +33,8 @@ const Projects = () => {
       <section className={styles.hero} data-testid="projects-hero">
         <div className={styles.heroOverlay}></div>
         <div className={styles.heroContent}>
-          <h1 className="reveal">Our Projects</h1>
-          <p className="reveal">Delivering excellence across India</p>
+          <h1 className="reveal">{t('Our Projects')}</h1>
+          <p className="reveal">{t('Delivering excellence across India')}</p>
         </div>
       </section>
 
@@ -40,8 +42,8 @@ const Projects = () => {
         <div className={styles.container}>
           <div className={styles.projectsGrid}>
             {projects.map((project, index) => (
-              <div 
-                key={project.id} 
+              <div
+                key={project.id}
                 className={`${styles.projectCard} reveal`}
                 onClick={() => setSelectedProject(project)}
                 data-testid={`project-card-${index}`}
@@ -70,8 +72,8 @@ const Projects = () => {
           title={selectedProject.name}
         >
           <img src={selectedProject.image} alt={selectedProject.name} style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
-          <p style={{ marginBottom: '0.5rem' }}><strong>Location:</strong> {selectedProject.location}</p>
-          <p style={{ marginBottom: '1rem' }}><strong>Category:</strong> {selectedProject.category}</p>
+          <p style={{ marginBottom: '0.5rem' }}><strong>{t('Location:')}</strong> {selectedProject.location}</p>
+          <p style={{ marginBottom: '1rem' }}><strong>{t('Category:')}</strong> {selectedProject.category}</p>
           <p>{selectedProject.description}</p>
         </Modal>
       )}

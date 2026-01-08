@@ -1,10 +1,10 @@
 .container {
   width: 100%;
   overflow: hidden;
-  background: rgba(245, 235, 221, 0.02);
+  background: hsl(var(--foreground) / 0.02);
   padding: 1rem 0;
-  border-top: 1px solid rgba(245, 235, 221, 0.1);
-  border-bottom: 1px solid rgba(245, 235, 221, 0.1);
+  border-top: 1px solid hsl(var(--foreground) / 0.1);
+  border-bottom: 1px solid hsl(var(--foreground) / 0.1);
   position: relative;
 }
 
@@ -27,12 +27,12 @@
 
 .marqueeWrapper::before {
   left: 0;
-  background: linear-gradient(to right, #0D0D0D 0%, transparent 100%);
+  background: linear-gradient(to right, hsl(var(--card) / 1) 0%, transparent 100%);
 }
 
 .marqueeWrapper::after {
   right: 0;
-  background: linear-gradient(to left, #0D0D0D 0%, transparent 100%);
+  background: linear-gradient(to left, hsl(var(--card) / 1) 0%, transparent 100%);
 }
 
 .marquee {

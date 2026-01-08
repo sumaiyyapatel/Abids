@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useScrollReveal } from '@/hooks/useGsapAnimations';
+import { useTranslation } from 'react-i18next';
 import { Phone, Mail, MapPin, Send, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/UI/button';
 import { Input } from '@/components/UI/input';
@@ -8,8 +9,9 @@ import { toast } from 'sonner';
 import styles from './Contact.module.css';
 
 const Contact = () => {
+  const { t } = useTranslation();
   useScrollReveal('.reveal', { y: 60, stagger: 0.12 });
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -21,11 +23,11 @@ const Contact = () => {
   const WHATSAPP_NUMBER = '919284511499';
 
   const productCategories = [
-    'Display Counters',
-    'Kitchen Equipment',
-    'Food Carts',
-    'Custom Solution',
-    'General Inquiry'
+    t('Display Counters'),
+    t('Kitchen Equipment'),
+    t('Food Carts'),
+    t('Custom Solution'),
+    t('General Inquiry')
   ];
 
   const handleChange = (e) => {
@@ -39,34 +41,34 @@ const Contact = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = t('Name is required');
     }
-    
+
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
+      newErrors.phone = t('Phone number is required');
     } else if (!/^\d{10}$/.test(formData.phone.replace(/\s/g, ''))) {
-      newErrors.phone = 'Please enter a valid 10-digit phone number';
+      newErrors.phone = t('Please enter a valid 10-digit phone number');
     }
-    
+
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
+      newErrors.email = t('Please enter a valid email');
     }
-    
+
     if (!formData.message.trim()) {
-      newErrors.message = 'Message is required';
+      newErrors.message = t('Message is required');
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
-      toast.error('Please fill in all required fields correctly');
+      toast.error(t('Please fill in all required fields correctly'));
       return;
     }
 
@@ -91,13 +93,13 @@ const Contact = () => {
     const whatsappMessage = messageLines.join('\n');
     const encodedMessage = encodeURIComponent(whatsappMessage);
     const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-    
+
     // Open WhatsApp in new tab
     window.open(whatsappURL, '_blank');
-    
+
     // Show success message
-    toast.success('Redirecting to WhatsApp...');
-    
+    toast.success(t('Redirecting to WhatsApp...'));
+
     // Reset form after a short delay
     setTimeout(() => {
       setFormData({
@@ -114,19 +116,19 @@ const Contact = () => {
   const contactInfo = [
     {
       icon: <Phone size={28} />,
-      title: 'Phone',
+      title: t('Phone'),
       value: '+91 98765 43210',
       link: 'tel:+919876543210'
     },
     {
       icon: <Mail size={28} />,
-      title: 'Email',
+      title: t('Email'),
       value: 'info@abidnagpur.com',
       link: 'mailto:info@abidnagpur.com'
     },
     {
       icon: <MapPin size={28} />,
-      title: 'Address',
+      title: t('Address'),
       value: 'Gandhibagh, Nagpur, Maharashtra 440002',
       link: 'https://maps.google.com'
     }
@@ -137,8 +139,8 @@ const Contact = () => {
       <section className={styles.hero} data-testid="contact-hero">
         <div className={styles.heroOverlay}></div>
         <div className={styles.heroContent}>
-          <h1 className="reveal">Get In Touch</h1>
-          <p className="reveal">We're here to help with your refrigeration needs</p>
+          <h1 className="reveal">{t('Get In Touch')}</h1>
+          <p className="reveal">{t("We're here to help with your refrigeration needs")}</p>
         </div>
       </section>
 
@@ -147,14 +149,14 @@ const Contact = () => {
           <div className={styles.grid}>
             {/* Contact Info */}
             <div className={`${styles.infoSection} reveal`}>
-              <h2>Contact Information</h2>
+              <h2>{t('Contact Information')}</h2>
               <p className={styles.infoText}>
-                Have a question or need a custom solution? Reach out to us through any of the channels below.
+                {t('Have a question or need a custom solution? Reach out to us through any of the channels below.')}
               </p>
-              
+
               <div className={styles.infoCards}>
                 {contactInfo.map((info, index) => (
-                  <a 
+                  <a
                     key={index}
                     href={info.link}
                     className={styles.infoCard}
@@ -172,15 +174,15 @@ const Contact = () => {
               </div>
 
               <div className={styles.whatsapp}>
-                <a 
+                <a
                   href={`https://wa.me/${WHATSAPP_NUMBER}`}
-                  target="_blank" 
+                  target="_blank"
                   rel="noopener noreferrer"
                   className={styles.whatsappBtn}
                   data-testid="whatsapp-btn"
                 >
                   <MessageCircle size={24} />
-                  <span>Chat Directly on WhatsApp</span>
+                  <span>{t('Chat Directly on WhatsApp')}</span>
                 </a>
               </div>
             </div>
@@ -188,11 +190,11 @@ const Contact = () => {
             {/* Contact Form */}
             <div className={`${styles.formSection} reveal`}>
               <form onSubmit={handleSubmit} className={styles.form} data-testid="contact-form">
-                <h2>Send us a Message</h2>
-                <p className={styles.formSubtext}>Fill the form and click send to continue on WhatsApp</p>
-                
+                <h2>{t('Send us a Message')}</h2>
+                <p className={styles.formSubtext}>{t('Fill the form and click send to continue on WhatsApp')}</p>
+
                 <div className={styles.formGroup}>
-                  <label htmlFor="name">Full Name *</label>
+                  <label htmlFor="name">{t('Full Name *')}</label>
                   <Input
                     id="name"
                     name="name"
@@ -200,7 +202,7 @@ const Contact = () => {
                     value={formData.name}
                     onChange={handleChange}
                     className={styles.input}
-                    placeholder="Enter your full name"
+                    placeholder={t('Enter your full name')}
                     data-testid="name-input"
                   />
                   {errors.name && (
@@ -210,7 +212,7 @@ const Contact = () => {
 
                 <div className={styles.formRow}>
                   <div className={styles.formGroup}>
-                    <label htmlFor="phone">Phone Number *</label>
+                    <label htmlFor="phone">{t('Phone Number *')}</label>
                     <Input
                       id="phone"
                       name="phone"
@@ -218,7 +220,7 @@ const Contact = () => {
                       value={formData.phone}
                       onChange={handleChange}
                       className={styles.input}
-                      placeholder="10-digit mobile number"
+                      placeholder={t('10-digit mobile number')}
                       data-testid="phone-input"
                     />
                     {errors.phone && (
@@ -227,7 +229,7 @@ const Contact = () => {
                   </div>
 
                   <div className={styles.formGroup}>
-                    <label htmlFor="email">Email Address</label>
+                    <label htmlFor="email">{t('Email Address')}</label>
                     <Input
                       id="email"
                       name="email"
@@ -235,7 +237,7 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleChange}
                       className={styles.input}
-                      placeholder="your@email.com (optional)"
+                      placeholder={t('your@email.com (optional)')}
                       data-testid="email-input"
                     />
                     {errors.email && (
@@ -245,7 +247,7 @@ const Contact = () => {
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label htmlFor="productInterest">Interested In</label>
+                  <label htmlFor="productInterest">{t('Interested In')}</label>
                   <select
                     id="productInterest"
                     name="productInterest"
@@ -253,7 +255,7 @@ const Contact = () => {
                     onChange={handleChange}
                     className={styles.select}
                   >
-                    <option value="">Select a category (optional)</option>
+                    <option value="">{t('Select a category (optional)')}</option>
                     {productCategories.map((category, index) => (
                       <option key={index} value={category}>
                         {category}
@@ -263,7 +265,7 @@ const Contact = () => {
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label htmlFor="message">Your Message *</label>
+                  <label htmlFor="message">{t('Your Message *')}</label>
                   <Textarea
                     id="message"
                     name="message"
@@ -271,7 +273,7 @@ const Contact = () => {
                     onChange={handleChange}
                     rows={5}
                     className={styles.textarea}
-                    placeholder="Tell us about your requirements..."
+                    placeholder={t('Tell us about your requirements...')}
                     data-testid="message-textarea"
                   />
                   {errors.message && (
@@ -279,17 +281,17 @@ const Contact = () => {
                   )}
                 </div>
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className={styles.submitBtn}
                   data-testid="submit-btn"
                 >
                   <Send size={18} />
-                  <span>Send via WhatsApp</span>
+                  <span>{t('Send')}</span>
                 </Button>
 
                 <p className={styles.disclaimer}>
-                  By clicking send, you'll be redirected to WhatsApp with your message pre-filled
+                  {t("By clicking send, you'll be redirected to WhatsApp with your message pre-filled")}
                 </p>
               </form>
             </div>

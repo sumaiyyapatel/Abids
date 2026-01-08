@@ -31,7 +31,7 @@ function App() {
         </main>
         <Footer />
       </BrowserRouter>
-      <Toaster position="top-right" theme="dark" richColors />
+      <Toaster position="top-right" theme="system" richColors />
     </div>
   );
 }

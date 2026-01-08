@@ -1,20 +1,20 @@
 .content {
-  background: rgba(26, 26, 26, 0.98) !important;
-  border: 1px solid rgba(245, 235, 221, 0.2) !important;
+  background: hsl(var(--card) / 0.98) !important;
+  border: 1px solid hsl(var(--foreground) / 0.2) !important;
   backdrop-filter: blur(20px);
-  color: #F5EBDD !important;
+  color: hsl(var(--card-foreground)) !important;
   max-width: 600px;
 }
 
 .title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #D72638 !important;
+  color: hsl(var(--primary)) !important;
   margin-bottom: 1rem;
 }
 
 .body {
-  color: rgba(245, 235, 221, 0.9);
+  color: hsl(var(--muted-foreground));
   line-height: 1.6;
 }
 
